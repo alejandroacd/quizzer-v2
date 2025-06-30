@@ -10,8 +10,7 @@ export default function BentoGrid() {
     return <Layout>
         {categories.map((category) => {
             const themeColors = getThemeColors(category.id)
-            const IconComponent = category.icon
-            return <BentoCard key={category.id} category={category} themeColors={themeColors} IconComponent={IconComponent} />
+            return <BentoCard key={category.id} category={category} themeColors={themeColors} />
         })}
     </Layout>
 }
