@@ -1,36 +1,131 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Quizzer
+
+A sleek, fast-paced trivia app built with Next.js 15 and React 19. Pick a category, set your question count, and see how much you really know.
+
+![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat-square&logo=next.js)
+![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38BDF8?style=flat-square&logo=tailwindcss&logoColor=white)
+
+---
+
+## Features
+
+- **4 categories** — Sports, History, Geography, and Arts
+- **Adjustable quiz length** — choose between 5 and 50 questions before you start
+- **Shuffled questions** — Fisher-Yates shuffle on every session so no two quizzes are the same
+- **Auto-advance** — moves to the next question 300ms after you pick an answer
+- **Results screen** — score summary, confetti on a perfect score, and a WhatsApp share button
+- **Dark / light theme** — system-aware with a manual toggle
+
+---
+
+## Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 15 (App Router, Turbopack) |
+| UI | React 19 + Shadcn UI (new-york) + Radix UI |
+| Styling | Tailwind CSS 4 + OKLch color system |
+| Animation | Framer Motion |
+| Icons | Lucide React |
+| Theming | next-themes |
+| Language | TypeScript 5 |
+
+---
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+# Install dependencies
+npm install
+
+# Start the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build   # Production build
+npm run start   # Serve production build
+npm run lint    # Run ESLint
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+quizzer-v2/
+├── app/
+│   ├── page.tsx                    # Home — bento grid of categories
+│   └── quiz/[category]/
+│       ├── page.tsx                # Quiz page
+│       ├── layout.tsx              # Quiz layout wrapper
+│       └── not-found.tsx           # 404 for unknown categories
+├── components/
+│   ├── bento-grid/                 # Home page category grid
+│   ├── bento-card/                 # Individual category card
+│   ├── category-card/              # Category selection card
+│   ├── quiz/                       # Quiz container + sub-components
+│   │   └── components/
+│   │       ├── question/           # Question display
+│   │       ├── options/            # Answer options
+│   │       └── progress/           # Progress bar
+│   ├── questions-length-selection/ # Slider to pick quiz length
+│   ├── completed-quiz/             # Results screen
+│   ├── fade-in/                    # Reusable fade-in wrapper
+│   ├── go-back/                    # Back navigation
+│   └── ui/                         # Shadcn primitives
+├── configs/
+│   ├── categories.ts               # Category metadata
+│   └── questions/                  # Question banks
+│       ├── sports.ts               # 250 questions
+│       ├── history.ts              # 320 questions
+│       ├── geography.ts            # 180 questions
+│       └── arts.ts                 # 150 questions
+├── hooks/
+│   └── useQuiz.tsx                 # All quiz state and logic
+├── types/
+│   └── index.ts                    # Question + Option types
+└── utils/
+    └── index.ts                    # shuffleArray (Fisher-Yates)
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Categories
 
-## Deploy on Vercel
+| Category | Questions | Difficulty |
+|---|---|---|
+| Sports | 250 | Mixed |
+| History | 320 | Hard |
+| Geography | 180 | Easy |
+| Arts | 150 | Medium |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Adding a New Category
+
+1. Create `configs/questions/{category}.ts` exporting a `Question[]` array.
+2. Add an entry to `configs/categories.ts` with a unique `id` matching the filename.
+3. The dynamic route `/quiz/[category]` picks it up automatically — no routing changes needed.
+
+---
+
+## Types
+
+```typescript
+interface Question {
+  id: string;
+  question: string;
+  options: Option[];
+}
+
+interface Option {
+  id: string;
+  text: string;
+  correct: boolean;
+}
+```
