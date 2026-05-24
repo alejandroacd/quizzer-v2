@@ -36,7 +36,7 @@ export function HoverBorderGradient({
       }, duration * 1000)
       return () => clearInterval(interval)
     }
-  }, [hovered, direction, duration, clockwise])
+  }, [hovered,directions,  direction, duration, clockwise])
 
   const movingMap: Record<Direction, string> = {
     TOP: "radial-gradient(20.7% 50% at 50% 0%, white 0%, rgba(255, 255, 255, 0) 100%)",

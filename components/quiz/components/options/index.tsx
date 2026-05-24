@@ -35,8 +35,7 @@ function OptionCard({
     selectedOption,
     handleOptionSelect,
     styleKey,
-    answerState,
-    correctOptionId,
+    answerState
 }: {
     option: Option
     index: number

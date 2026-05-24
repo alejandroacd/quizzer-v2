@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__magic__21st_magic_component_inspiration",
+      "mcp__magic__21st_magic_component_builder",
+      "Bash(npm run:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx next:*)"
+    ]
+  }
+}
