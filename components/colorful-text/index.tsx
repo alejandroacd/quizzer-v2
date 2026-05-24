@@ -1,19 +1,20 @@
 "use client"
 import React from "react"
 import { motion } from "framer-motion"
+const colors = [
+    "#a5b4fc", // lavanda pastel
+    "#f9a8d4", // rosa pastel
+    "#93c5fd", // celeste pastel
+    "#fcd34d", // amarillo claro
+    "#6ee7b7", // verde menta
+    "#fda4af", // rosado suave
+    "#c4b5fd", // lila claro
+    "#fdba74", // naranja pastel
+    "#bae6fd", // celeste muy suave
+    "#bbf7d0", // verde suave
+  ]
+
 export default function ColourfulText({ text }: { text: string }) {
-    const colors = [
-        "#a5b4fc", // lavanda pastel
-        "#f9a8d4", // rosa pastel
-        "#93c5fd", // celeste pastel
-        "#fcd34d", // amarillo claro
-        "#6ee7b7", // verde menta
-        "#fda4af", // rosado suave
-        "#c4b5fd", // lila claro
-        "#fdba74", // naranja pastel
-        "#bae6fd", // celeste muy suave
-        "#bbf7d0", // verde suave
-      ]
       
   const [currentColors, setCurrentColors] = React.useState(colors)
   const [count, setCount] = React.useState(0)

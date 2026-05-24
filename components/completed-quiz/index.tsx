@@ -105,7 +105,7 @@ export const CardCompletedQuiz = ({
                                         Quiz Completed!
                                     </h1>
                                     <p className="text-gray-600 dark:text-gray-400 text-lg">
-                                        You've finished the quiz
+                                        You&apos;ve finished the quiz
                                     </p>
                                 </motion.div>
 

@@ -1,7 +1,7 @@
 'use client'
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { ArrowLeft, ChevronLeft, MoveLeft } from "lucide-react";
+import { ArrowLeft, ChevronLeft } from "lucide-react";
 
 export const GoBackButton = ({ 
   text, 
