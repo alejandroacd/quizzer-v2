@@ -37,7 +37,7 @@ export const BentoCard = ({ category, themeColors }: BentoCardProps) => {
                 <div className={`absolute  inset-0 rounded-lg  opacity-20 group-hover:opacity-10 transition-opacity duration-500 blur-sm`}>
                 </div>
                 <Content description={category.description} />
-                <Footer categoryId={category.id} />
+                <Footer />
             </Card>
         </HoverBorderGradient>
     </Card>
