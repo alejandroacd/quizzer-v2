@@ -198,3 +198,47 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* ─── Quiz animated background shell ─────────────────────── */
+@keyframes quiz-gradient-shift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.quiz-shell {
+  position: relative;
+  padding: 2rem 1.5rem;
+  border-radius: 1.5rem;
+  background: linear-gradient(
+    135deg,
+    oklch(0.97 0.008 295),
+    oklch(0.95 0.015 320),
+    oklch(0.96 0.012 270),
+    oklch(0.97 0.010 305)
+  );
+  background-size: 300% 300%;
+  animation: quiz-gradient-shift 14s ease infinite;
+  box-shadow:
+    0 1px 3px oklch(0.6 0.07 300 / 0.06),
+    0 8px 32px oklch(0.6 0.07 300 / 0.10),
+    inset 0 1px 0 oklch(1 0 0 / 0.6);
+}
+
+.dark .quiz-shell {
+  background: linear-gradient(
+    135deg,
+    oklch(0.22 0.022 293),
+    oklch(0.24 0.030 310),
+    oklch(0.21 0.018 275),
+    oklch(0.23 0.025 300)
+  );
+  background-size: 300% 300%;
+  animation: quiz-gradient-shift 14s ease infinite;
+  box-shadow:
+    0 1px 3px oklch(0 0 0 / 0.3),
+    0 8px 32px oklch(0 0 0 / 0.4),
+    inset 0 1px 0 oklch(1 0 0 / 0.05);
+}
+
+

@@ -13,7 +13,7 @@ export const Header = ({
     title,
     layout }: HeaderProps) => {
     return <CardHeader className="p-0 flex items-center gap-2">
-        <div className={`relative p-3 bg-card/80 backdrop-blur-sm rounded-${layout === "large" ? "2xl" : "xl"} border border-primary/20 ${border} transition-all duration-500 group-hover:scale-110 group-hover:rotate-12`}>
+        <div className={`relative p-3 bg-card/80 backdrop-blur-sm rounded-${layout === "large" ? "2xl" : "xl"}  border-primary/20 ${border} transition-all duration-500 group-hover:scale-110`}>
 
             {image && <Image
                 src={image}
@@ -22,7 +22,7 @@ export const Header = ({
                 height={30}
             />}
         </div>
-        <h1 className="scroll-m-20 text-center font-extrabold tracking-tight text-balance">
+        <h1 className="scroll-m-20 text-center text-2xl font-extrabold tracking-tight text-balance">
             {title}
         </h1>
     </CardHeader>

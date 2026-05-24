@@ -13,7 +13,7 @@ export const getThemeColors = (categoryId: string) => {
     switch (categoryId) {
         case "sports":
             return {
-                shadow: "group-hover:shadow-primary/15",
+                shadow: "group-hover:shadow-primary/20",
                 border: "group-hover:border-primary/40",
                 text: "group-hover:text-primary",
                 button: "bg-primary hover:bg-primary/90",

@@ -1,14 +1,27 @@
-import { useEffect } from "react"
+import { useEffect, useCallback } from "react"
 import { useState } from "react"
 import { Question, Option } from "@/types"
+import { shuffleArray } from "@/utils"
+
+export type AnswerState = "idle" | "correct" | "wrong"
+
 export const useQuiz = ({ questions }: { questions: Question[] }) => {
+    const [quizLength, setQuizLength] = useState<number>(questions.length > 50 ? 50 : questions.length)
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
     const [selectedOption, setSelectedOption] = useState<string | null>(null)
     const [quizCompleted, setQuizCompleted] = useState(false)
     const [score, setScore] = useState(0)
     const [questionRevealed, setQuestionRevealed] = useState(false)
-    const currentQuestion = questions[currentQuestionIndex]
-    const progress = ((currentQuestionIndex + 1) / questions.length) * 100
+    const [shuffledQuestions, setShuffledQuestions] = useState<Question[]>(questions)
+    const [answerState, setAnswerState] = useState<AnswerState>("idle")
+
+    const activeQuestions = shuffledQuestions.length > 0
+        ? shuffledQuestions
+        : questions.slice(0, quizLength)
+    const currentQuestion = activeQuestions[currentQuestionIndex]
+    const progress = ((currentQuestionIndex + 1) / quizLength) * 100
+
+    const correctOptionId = currentQuestion?.options.find((opt) => opt.correct)?.id ?? null
 
     useEffect(() => {
         setQuestionRevealed(false)
@@ -18,7 +31,7 @@ export const useQuiz = ({ questions }: { questions: Question[] }) => {
         return () => clearTimeout(timer)
     }, [currentQuestionIndex])
 
-    const handleOptionSelect = (optionId: string) => {
+    const handleOptionSelect = useCallback((optionId: string) => {
         if (selectedOption) return
 
         setSelectedOption(optionId)
@@ -27,31 +40,46 @@ export const useQuiz = ({ questions }: { questions: Question[] }) => {
         const isCorrect = selectedOptionData?.correct || false
 
         if (isCorrect) {
-            setScore(score + 1)
+            setScore((s) => s + 1)
+            setAnswerState("correct")
+        } else {
+            setAnswerState("wrong")
         }
 
-        // Auto advance to next question after animation
+        // Auto advance to next question after animations settle
         setTimeout(() => {
-            if (currentQuestionIndex < questions.length - 1) {
+            setAnswerState("idle")
+            if (currentQuestionIndex < activeQuestions.length - 1) {
                 setCurrentQuestionIndex(currentQuestionIndex + 1)
                 setSelectedOption(null)
             } else {
                 setQuizCompleted(true)
             }
-        }, 300)
-    }
+        }, 1200)
+    }, [selectedOption, currentQuestion, currentQuestionIndex, activeQuestions.length])
+
+    // Keyboard shortcut: 1-4 keys map to option indices
+    useEffect(() => {
+        const handler = (e: KeyboardEvent) => {
+            const idx = parseInt(e.key, 10) - 1
+            if (idx >= 0 && idx < currentQuestion?.options.length) {
+                handleOptionSelect(currentQuestion.options[idx].id)
+            }
+        }
+        window.addEventListener("keydown", handler)
+        return () => window.removeEventListener("keydown", handler)
+    }, [currentQuestion, handleOptionSelect])
 
     const getOptionStyle = (option: Option) => {
-        if (selectedOption === option.id) {
-            const selectedOptionData = currentQuestion.options.find((opt) => opt.id === selectedOption)
-            const isCorrect = selectedOptionData?.correct || false
+        if (!selectedOption) return ""
 
-            return isCorrect
-                ? "border-green-500 bg-gradient-to-r from-green-400 to-green-500 text-white transform scale-[0.98] shadow-lg animate-pulse"
-                : "border-red-500 bg-gradient-to-r from-red-400 to-red-500 text-white transform scale-[0.98] shadow-lg animate-pulse"
+        if (option.id === selectedOption) {
+            return option.correct ? "correct-selected" : "wrong-selected"
         }
-
-        return "border-gray-200 hover:border-gray-300 hover:bg-gray-50 dark:border-gray-700 dark:hover:border-gray-600 dark:hover:bg-gray-800 hover:scale-[1.01] hover:shadow-md"
+        if (option.correct && selectedOption) {
+            return "correct-reveal"
+        }
+        return "dimmed"
     }
 
     const resetQuiz = () => {
@@ -59,8 +87,16 @@ export const useQuiz = ({ questions }: { questions: Question[] }) => {
         setSelectedOption(null)
         setQuizCompleted(false)
         setScore(0)
+        setAnswerState("idle")
     }
 
+    const setNumberOfQuestions = (num: number) => {
+        const length = Math.min(num, 50, questions.length)
+        const randomized = shuffleArray(questions).slice(0, length)
+        setShuffledQuestions(randomized)
+        setQuizLength(length)
+        resetQuiz()
+    }
 
     return {
         currentQuestionIndex,
@@ -73,10 +109,14 @@ export const useQuiz = ({ questions }: { questions: Question[] }) => {
         setScore,
         questionRevealed,
         setQuestionRevealed,
+        answerState,
+        correctOptionId,
         getOptionStyle,
         resetQuiz,
         progress,
         currentQuestion,
-        handleOptionSelect
+        handleOptionSelect,
+        quizLength,
+        setNumberOfQuestions
     }
 }
